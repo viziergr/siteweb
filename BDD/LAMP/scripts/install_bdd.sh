@@ -21,7 +21,7 @@ echo "END - install MariaDB"
 
 echo "START - Installation de phpMyAdmin "
 
-echo "=> [1]: Install required packages ...."
+echo "=> [1] - Install required packages ...."
 apt-get install $APT_OPT \
   openssl \
   php-mbstring \
@@ -33,7 +33,7 @@ apt-get install $APT_OPT \
   php-cgi \
   >> $LOG_FILE 2>&1
 
-echo "=> [2]: Download files"
+echo "=> [2] - Download files"
 wget -q -O /tmp/myadmin.zip \
 https://files.phpmyadmin.net/phpMyAdmin/${MYADMIN_VERSION}/phpMyAdmin-${MYADMIN_VERSION}-all-languages.zip \
 >> $LOG_FILE 2>&1
@@ -57,5 +57,8 @@ service apache2 restart
 
 echo "=> [5] - Modif mot de passe root"
 mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
+
+echo "=> [6] - Connexion à la BDD"
+sed -i "s/localhost/192.168.56.90/g" /var/www/html/myadmin/config.inc.php
 
 echo "END - Configuration phpMyAdmin"

@@ -3,13 +3,13 @@
 
 Vagrant.configure("2") do |config|
     # Serveur virtuel accueillant le site web
-    config.vm.define "srv-lamp", primary: true do |machine|
-      machine.vm.hostname = "srv-lamp"
+    config.vm.define "srv-bdd", primary: true do |machine|
+      machine.vm.hostname = "srv-bdd"
       machine.vm.box = "chavinje/fr-bull-64"
-      machine.vm.network :private_network, ip: "192.168.56.80"
+      machine.vm.network :private_network, ip: "192.168.56.90"
       machine.vm.provider :virtualbox do |v|
-        v.customize ["modifyvm", :id, "--name", "srv-lamp"]
-        v.customize ["modifyvm", :id, "--groups", "/S8-projetCSS"]
+        v.customize ["modifyvm", :id, "--name", "srv-bdd"]
+        v.customize ["modifyvm", :id, "--groups", "/S8-projetCSS/lamp"]
         v.customize ["modifyvm", :id, "--cpus", "1"]
         v.customize ["modifyvm", :id, "--memory", 2*256]
         v.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
@@ -21,8 +21,8 @@ Vagrant.configure("2") do |config|
         service ssh restart
       SHELL
         machine.vm.provision "shell", path: "scripts/install_sys.sh"
-        machine.vm.provision "shell", path: "scripts/install_web.sh"
         machine.vm.provision "shell", path: "scripts/install_bdd.sh"
+        machine.vm.provision "shell", path: "scripts/link_vm.sh"
     end
   end
   
